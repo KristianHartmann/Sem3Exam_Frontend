@@ -1,30 +1,65 @@
-import { useState } from "react";
-import React from "react";
+import React, { useState } from 'react';
+import facade from '../apiFacade';
+import "../styles/main.css";
 
-function LogIn({ login }) {
-  const init = { username: "", password: "" };
-  const [loginCredentials, setLoginCredentials] = useState(init);
+const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(facade.loggedIn());
+  const [message, setMessage] = useState("");
 
-  const performLogin = (evt) => {
-    evt.preventDefault();
-    login(loginCredentials.username, loginCredentials.password);
+  const handleLogin = (event) => {
+    event.preventDefault();
+    facade
+      .login(username, password)
+      .then((res) => {
+        setIsLoggedIn(facade.loggedIn());
+        setMessage("Welcome " + username);
+      })
+      .catch((err) => {
+        if (err.status) {
+          err.fullError.then((e) => setMessage(e.message));
+        } else {
+          setMessage("Network error");
+        }
+      });
   };
-  const onChange = (evt) => {
-    setLoginCredentials({
-      ...loginCredentials,
-      [evt.target.id]: evt.target.value,
-    });
-  };
+
+  const handleLogout = () => {
+    facade.logout();
+    setIsLoggedIn(false);
+    // window.location.reload();
+    setUsername("")
+    setPassword("")
+  }
 
   return (
     <div>
-      <h2>Login</h2>
-      <form onChange={onChange}>
-        <input placeholder="User Name" id="username" />
-        <input placeholder="Password" id="password" />
-        <button onClick={performLogin}>Login</button>
-      </form>
+      {!isLoggedIn ? (
+        <form onSubmit={handleLogin}>
+          <input className="input-field"
+            type="text"
+            placeholder="Username"
+            onChange={(e) => setUsername(e.target.value)}
+            value={username}
+          />
+          <input className="input-field"
+            type="password"
+            placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+          />
+          <button type="submit" className="btn">Login</button>
+          <div className="message">{message}</div>
+        </form>
+      ) : (
+        <div>
+          <button onClick={handleLogout} className="btn">Logout</button>
+          <div className="message">{message}</div>
+        </div>
+      )}
     </div>
   );
 }
-export default LogIn;
+
+export default Login;

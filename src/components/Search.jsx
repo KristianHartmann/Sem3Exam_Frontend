@@ -1,28 +1,14 @@
-import React, { useRef } from "react";
+import React from 'react';
+import UserData from './UserData';
+import UserDataAll from './UserDataAll.jsx';
 
-const Search = (props) => {
-  const inputRef = useRef();
-  console.log(inputRef);
-  return (
-    <div>
-      <h3> Search</h3>
-      <form>
-        <input
-          type="search"
-          ref={inputRef}
-          required
-          placeholder="Search....  "
-        />
-        <button
-          type="submit"
-          onClick={() => {
-            inputRef.current.focus();
-          }}>
-          {" "}
-          Search
-        </button>
-      </form>
-    </div>
-  );
-};
+const Search = () => {
+    return (
+        <div>
+            <UserData />
+            <UserDataAll />
+        </div>
+    )
+}
+
 export default Search;

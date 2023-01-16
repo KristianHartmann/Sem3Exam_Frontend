@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import facade from "./apiFacade";
 import LogIn from "./components/Login";
-import LoggedIn from "./components/LoggedIn";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(facade.loggedIn);
