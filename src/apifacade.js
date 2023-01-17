@@ -1,10 +1,37 @@
 const URL = "https://kiah.dk/tomcat/Sem3Exam";
+import jwtDecode from 'jwt-decode';
 
 function handleHttpErrors(res) {
   if (!res.ok) {
     return Promise.reject({ status: res.status, fullError: res.json() });
   }
   return res.json();
+}
+
+const unpackToken = () => {
+  const token = getToken();
+  if (token) {
+      try {
+          const decoded = jwtDecode(token);
+          const exp = decoded.exp;
+          if (exp < Date.now() / 1000) {
+              // token expired
+              return false;
+          }
+          else if (decoded.role === 'admin') {
+              return true;
+          }
+          else {
+              return false;
+          }
+      } catch (e) {
+          // invalid token
+          return false;
+      }
+  }
+  else {
+      return false;
+  }
 }
 
 function apiFacade() {
@@ -53,6 +80,7 @@ function apiFacade() {
     return opts;
   };
   return {
+    unpackToken,
     makeOptions,
     setToken,
     getToken,

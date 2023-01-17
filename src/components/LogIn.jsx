@@ -14,7 +14,7 @@ const Login = () => {
       .login(username, password)
       .then((res) => {
         setIsLoggedIn(facade.loggedIn());
-        setMessage("Welcome " + username);
+        window.location.reload();
       })
       .catch((err) => {
         if (err.status) {
@@ -28,9 +28,9 @@ const Login = () => {
   const handleLogout = () => {
     facade.logout();
     setIsLoggedIn(false);
-    // window.location.reload();
     setUsername("")
     setPassword("")
+    window.location.reload();
   }
 
   return (
