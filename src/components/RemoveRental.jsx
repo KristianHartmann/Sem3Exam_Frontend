@@ -2,20 +2,20 @@ import React, { useState } from "react";
 import facade from "../apiFacade";
 import { API_URL } from "../config";
 
-const UserData = () => {
-  const [username, setUsername] = useState("");
-  const [userInfo, setUserInfo] = useState({});
-  const [message, setMessage] = useState("");
+    
 
-  const handleSearch = (event) => {
+const RemoveRental = () => {
+  const [message, setMessage] = useState("");
+  const [rentalId, setRentalId] = useState("");
+
+  const handleRemove = (event) => {
     event.preventDefault();
-    setUserInfo({});
     setMessage("");
-    if (username) {
-      const options = facade.makeOptions("POST", true, {
-        username: username
+    if (rentalId) {
+      const options = facade.makeOptions("DELETE", true, {
+        rentalId: rentalId
       });
-      fetch(`${API_URL}/user/user`, options)
+      fetch(`${API_URL}/admin/removeRental`, options)
         .then((res) => {
           if (res.status === 403) {
             return res.json()
@@ -29,23 +29,14 @@ const UserData = () => {
           } else if (res.ok) {
             return res.json();
           } else if (res.status === 204) {
-            setMessage("User not found");
+            setMessage("Rental not found");
           } else {
             throw new Error(res.statusText);
           }
         })
         .then((res) => {
           if (res) {
-            if (res.role) {
-              setUserInfo({
-                username: res.username,
-                role: res.role
-              });
-            } else {
-              setUserInfo({
-                username: res.username
-              });
-            }
+           setMessage("Rental deleted");
           }
         })
         .catch((err) => {
@@ -56,24 +47,23 @@ const UserData = () => {
 
   return (
     <div>
-      <h3>Search for a user</h3>
-      <form onSubmit={handleSearch}>
+      <h3>Remove a rental</h3>
+      <form onSubmit={handleRemove}>
         <input
           className="input-field"
           type="search"
-          placeholder="User Search...."
-          onChange={(e) => setUsername(e.target.value)}
-          value={username}
+          placeholder="Rental search...."
+          onChange={(e) => setRentalId(e.target.value)}
+          value={rentalId}
         />
         <button type="submit" className="btn">
-          Search
+          Remove
         </button>
       </form>
-      {userInfo.username && <p>Username: {userInfo.username}</p>}
-      {userInfo.role && <p>Role: {userInfo.role}</p>}
       <p>{message}</p>
     </div>
   );
 };
 
-export default UserData;
+export default RemoveRental;
+

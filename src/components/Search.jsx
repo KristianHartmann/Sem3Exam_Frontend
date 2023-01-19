@@ -1,12 +1,13 @@
 import React from 'react';
-import UserData from './UserData';
-import UserDataAll from './UserDataAll.jsx';
+import Rental from './Rental';
+import RentalDataAll from './RentalDataAll';
+
 
 const Search = () => {
     return (
         <div>
-            <UserData />
-            <UserDataAll />
+            <RentalDataAll/>
+            <Rental />
         </div>
     )
 }

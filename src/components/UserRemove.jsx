@@ -2,20 +2,20 @@ import React, { useState } from "react";
 import facade from "../apiFacade";
 import { API_URL } from "../config";
 
-const UserData = () => {
-  const [username, setUsername] = useState("");
-  const [userInfo, setUserInfo] = useState({});
-  const [message, setMessage] = useState("");
+    
 
-  const handleSearch = (event) => {
+const UserRemove = () => {
+  const [message, setMessage] = useState("");
+  const [username, setUsername] = useState("");
+
+  const handleRemove = (event) => {
     event.preventDefault();
-    setUserInfo({});
     setMessage("");
     if (username) {
       const options = facade.makeOptions("POST", true, {
         username: username
       });
-      fetch(`${API_URL}/user/user`, options)
+      fetch(`${API_URL}/user/remove`, options)
         .then((res) => {
           if (res.status === 403) {
             return res.json()
@@ -36,16 +36,7 @@ const UserData = () => {
         })
         .then((res) => {
           if (res) {
-            if (res.role) {
-              setUserInfo({
-                username: res.username,
-                role: res.role
-              });
-            } else {
-              setUserInfo({
-                username: res.username
-              });
-            }
+           setMessage("User deleted");
           }
         })
         .catch((err) => {
@@ -56,8 +47,8 @@ const UserData = () => {
 
   return (
     <div>
-      <h3>Search for a user</h3>
-      <form onSubmit={handleSearch}>
+      <h3>Remove a user</h3>
+      <form onSubmit={handleRemove}>
         <input
           className="input-field"
           type="search"
@@ -66,14 +57,13 @@ const UserData = () => {
           value={username}
         />
         <button type="submit" className="btn">
-          Search
+          Remove
         </button>
       </form>
-      {userInfo.username && <p>Username: {userInfo.username}</p>}
-      {userInfo.role && <p>Role: {userInfo.role}</p>}
       <p>{message}</p>
     </div>
   );
 };
 
-export default UserData;
+export default UserRemove;
+

@@ -1,4 +1,6 @@
-const URL = "https://kiah.dk/tomcat/Sem3Exam";
+import { API_URL } from './config';
+
+const URL = API_URL;
 import jwtDecode from 'jwt-decode';
 
 function handleHttpErrors(res) {
@@ -7,6 +9,8 @@ function handleHttpErrors(res) {
   }
   return res.json();
 }
+
+
 
 const unpackToken = () => {
   const token = getToken();
@@ -33,7 +37,9 @@ const unpackToken = () => {
       return false;
   }
 }
-
+function getUserName() {
+  return localStorage.getItem("username");
+}
 function apiFacade() {
   const setToken = (token) => {
     localStorage.setItem("jwtToken", token);
@@ -54,7 +60,7 @@ function apiFacade() {
       username: user,
       password: password,
     });
-    return fetch(URL + "/api/login", options)
+    return fetch(URL + "/login", options)
       .then(handleHttpErrors)
       .then((res) => {
         setToken(res.token);
@@ -80,6 +86,7 @@ function apiFacade() {
     return opts;
   };
   return {
+    getUserName,
     unpackToken,
     makeOptions,
     setToken,

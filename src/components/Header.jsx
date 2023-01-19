@@ -4,14 +4,15 @@ import facade from "../apiFacade";
 import jwtDecode from "jwt-decode";
 import "../styles/header.css";
 
-const Header = (props) => {
+const Header = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const fToken = facade.getToken();
   let isAdmin = false;
-
+  let isUser = false;
   if(fToken){
     const token = jwtDecode(fToken)?.roles;
     isAdmin = token?.toLowerCase()?.includes("admin");
+    isUser = token?.toLowerCase()?.includes("user");
   }
 
   useEffect(() => {
@@ -30,7 +31,8 @@ const Header = (props) => {
         <NavLink to="/" onClick={() => {
           facade.logout();
           setLoggedIn(false);
-          setIsAdmin(false);
+          isAdmin = false;
+          isUser = false;
           localStorage.removeItem('jwtToken')
         }}>
           <i className="fa fa-fw fa-user"></i> Logout
@@ -48,6 +50,16 @@ const Header = (props) => {
       {loggedIn && isAdmin ? (
         <NavLink to="/admin">
           <i className="fa fa-fw fa-cogs"></i> Admin Page
+        </NavLink>
+      ) : null}
+      {loggedIn && isAdmin ? (
+        <NavLink to="/adminTwo">
+          <i className="fa fa-fw fa-cogs"></i> Admin Page Two
+        </NavLink>
+      ) : null}
+      {loggedIn && isUser ? (
+        <NavLink to="/user">
+          <i className="fa fa-fw fa-cogs"></i> User Page
         </NavLink>
       ) : null}
     </nav>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import facade from '../apiFacade';
 import "../styles/main.css";
+import GetUserRental from './GetUserRental';
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -14,6 +15,7 @@ const Login = () => {
       .login(username, password)
       .then((res) => {
         setIsLoggedIn(facade.loggedIn());
+        localStorage.setItem("username", username);
         window.location.reload();
       })
       .catch((err) => {
@@ -28,10 +30,12 @@ const Login = () => {
   const handleLogout = () => {
     facade.logout();
     setIsLoggedIn(false);
+    localStorage.setItem("username", "");
     setUsername("")
     setPassword("")
     window.location.reload();
   }
+
 
   return (
     <div>
@@ -58,6 +62,7 @@ const Login = () => {
           <div className="message">{message}</div>
         </div>
       )}
+
     </div>
   );
 }

@@ -8,6 +8,8 @@ import Search from "./components/Search";
 import Login from "./components/Login";
 import CreateUser from "./components/CreateUser";
 import AdminPage from "./components/AdminPage";
+import UserPage from "./components/UserPage";
+import AdminPageTwo from "./components/AdminPageTwo";
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -22,6 +24,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<CreateUser />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/adminTwo" element={<AdminPageTwo />} />
+        <Route path="/user" element={<UserPage />} />
         <Route path="*" element={<h1>Page Not Found !!!</h1>} />
       </Routes>
     </Router>

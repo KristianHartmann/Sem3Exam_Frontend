@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import facade from "../apiFacade";
 import "../styles/header.css";
+import { API_URL } from "../config";
 
 const UserDataAll = () => {
   const [usersInfo, setUsersInfo] = useState([]);
@@ -10,7 +11,7 @@ const UserDataAll = () => {
   const handleShowUsers = () => {
     setShowTable(true);
     const options = facade.makeOptions("GET", true);
-    fetch(`https://kiah.dk/tomcat/Sem3Exam/api/user/all`, options)
+    fetch(`${API_URL}/user/all`, options)
       .then((res) => {
         if (res.status === 403) {
           return res.json()
